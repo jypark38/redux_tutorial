@@ -1,3 +1,9 @@
+reference: https://github.com/reduxjs/redux-fundamentals-example-app
+
+https://codesandbox.io/p/sandbox/github/reduxjs/redux-fundamentals-example-app/tree/tutorial-steps/?file=%2Fpackage.json%3A1%2C1-45%2C1
+
+package.json 복사
+
 # Redux Fundamentals Tutorial Example
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
