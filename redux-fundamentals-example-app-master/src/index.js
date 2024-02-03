@@ -39,7 +39,7 @@ store.dispatch({
 })
 
 // 상태 업데이트 리스너 해제하기
-// unsubscribe()
+unsubscribe()
 
 // 추가 액션 디스패치 해보기
 store.dispatch({ type: 'todos/todoAdded', payload: 'Try creating a store' })
