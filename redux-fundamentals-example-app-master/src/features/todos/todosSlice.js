@@ -1,0 +1,44 @@
+const initialState = [
+  { id: 0, text: 'Learn React', completed: true },
+  { id: 1, text: 'Learn Redux', completed: false, color: 'purple' },
+  { id: 2, text: 'Build something fun!', completed: false, color: 'blue' },
+]
+
+function nextTodoId(todos) {
+  const maxId = todos.reduce((maxId, todo) => Math.max(todo.id, maxId), -1)
+  return maxId
+}
+
+export default function todosReducer(state = initialState, action) {
+  switch (action.type) {
+    // 액션 타입에 따라 뭔가를 한다
+    // {type: 'todos/todoAdded', payload: todoText}
+    case 'todos/todoAdded': {
+      return [
+        ...state,
+        // 스프레드 문법으로 이전 todo를 복사하고, 아래 새로운 todo를 추가한다.
+        {
+          id: nextTodoId(state),
+          text: action.payload,
+          completed: false,
+        },
+      ]
+    }
+    // {type: 'todos/todoToggled', payload: todoId}
+    case 'todos/todoToggled': {
+      return state.map((todo) => {
+        // 만약 관심있는 항목이 아니면, 그대로 보낸다
+        if (todo.id !== action.payload) {
+          return todo
+        }
+        // 바꿔야하는 항목이면 복사본을 반환한다.
+        return {
+          ...todo,
+          completed: !todo.completed,
+        }
+      })
+    }
+    default:
+      return state
+  }
+}
