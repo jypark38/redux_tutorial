@@ -51,3 +51,14 @@
 {type: 'todos/completedCleared'}
 {type: 'filters/statusFilterChanged', payload: filterValue}
 {type: 'filters/colorFilterChanged', payload: {color, changeType}}
+
+## Component Tree
+
+- `<App>` : 루트 컴포넌트
+  - `<Header>` : ‘next todo’ input과 ‘complete all todos’ checkbox를 갖는다
+  - `<TodoList>` : 필터링된 결과를 기반으로 todo item을 보여준다
+    - `<TodoListItem>`
+      list item의 단일 컴포넌트
+      todo의 완료 상태를 토글할 수도 있고, 색상 카테고리를 선택할 수도 있다
+  - `<Footer>`  
+    활성화된 todo의 수를 보여주고, 색상 카테고리와 완료 상태를 기반으로 필터링을 제어한다
