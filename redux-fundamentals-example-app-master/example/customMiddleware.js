@@ -12,3 +12,26 @@ function exampleMiddleware(storeAPI) {
     }
   }
 }
+
+const alwaysReturnHelloMiddleware = (storeAPI) => (next) => (action) => {
+  const originalResult = next(action)
+  // Ignore the original result, return something else
+  return 'Hello!'
+}
+
+const middlewareEnhancer = applyMiddleware(alwaysReturnHelloMiddleware)
+const store = createStore(rootReducer, middlewareEnhancer)
+
+const dispatchResult = store.dispatch({ type: 'some/action' })
+console.log(dispatchResult)
+// log: 'Hello!'
+
+const delayedMessageMiddleware = (storeAPI) => (next) => (action) => {
+  if (action.type === 'todos/todoAdded') {
+    setTimeout(() => {
+      console.log('Added a new todo: ', action.payload)
+    }, 1000)
+  }
+
+  return next(action)
+}
