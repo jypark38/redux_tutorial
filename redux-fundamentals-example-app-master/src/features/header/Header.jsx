@@ -7,12 +7,10 @@ const Header = () => {
 
   const handleChange = (event) => setText(event.target.value)
 
-  const handleKeyUp = (event) => {
+  const handleKeyDown = (event) => {
     const trimmedText = event.target.value.trim()
 
     if (event.key === 'Enter' && trimmedText) {
-      console.log(event.key)
-      console.log(trimmedText)
       const action = {
         type: 'todos/todoAdded',
         payload: trimmedText,
@@ -29,7 +27,7 @@ const Header = () => {
       autoFocus={true}
       value={text}
       onChange={handleChange}
-      onKeyUp={handleKeyUp}
+      onKeyDown={handleKeyDown}
     />
   )
 }
