@@ -1,4 +1,6 @@
 import { client } from '../../api/client'
+import { createSelector } from 'reselect'
+import { StatusFilters } from '../filters/filtersSlice'
 
 const initialState = []
 
@@ -86,3 +88,45 @@ export function saveNewTodo(text) {
     dispatch(todoAdded(response.todo))
   }
 }
+
+// selectors
+
+export const selectTodos = (state) => state.todos
+
+export const selectTodoById = (state, todoId) => {
+  return selectTodos(state).find((todo) => todo.id === todoId)
+}
+
+export const selectTodoIds = createSelector(
+  // 첫 인자로 하나 이상의 Input selector 함수 전달
+  selectTodos,
+  // 그리고 모든 입력 결과를 인자로 받아 최종 결과를 반환하는 output selector
+  (todos) => todos.map((todo) => todo.id)
+)
+
+export const selectFilteredTodos = createSelector(
+  // First input selector: all todos
+  selectTodos,
+  // Second input selector: current status filter
+  (state) => state.filters,
+  // Output selector: receives both values
+  (todos, filters) => {
+    const { status, colors } = filters
+    const showAllCompletions = status === StatusFilters.All
+    if (showAllCompletions && colors.length === 0) {
+      return todos
+    }
+    const completedStatus = status === StatusFilters.Completed
+    return todos.filter((todo) => {
+      const statusMatches =
+        showAllCompletions || todo.completed === completedStatus
+      const colorMatches = colors.length === 0 || colors.includes(todo.color)
+      return statusMatches && colorMatches
+    })
+  }
+)
+
+export const selectFilteredTodoIds = createSelector(
+  selectFilteredTodos,
+  (filteredTodos) => filteredTodos.map((todo) => todo.id)
+)
