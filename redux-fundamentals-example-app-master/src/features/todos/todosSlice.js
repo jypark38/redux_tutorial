@@ -2,11 +2,6 @@ import { client } from '../../api/client'
 
 const initialState = []
 
-function nextTodoId(todos) {
-  const maxId = todos.reduce((maxId, todo) => Math.max(todo.id, maxId), -1)
-  return maxId + 1
-}
-
 export default function todosReducer(state = initialState, action) {
   switch (action.type) {
     // 액션 타입에 따라 뭔가를 한다
@@ -67,19 +62,27 @@ export default function todosReducer(state = initialState, action) {
 
 // Thunk function
 
-export async function fetchTodos(dispatch, getState) {
-  const response = await client.get('/fakeApi/todos')
-
-  dispatch({
+export const todoLoaded = (todos) => {
+  return {
     type: 'todos/todosLoaded',
-    payload: response.todos,
-  })
+    payload: todos,
+  }
 }
+
+export const fetchTodos = () => async (dispatch) => {
+  const response = await client.get('/fakeApi/todos')
+  dispatch(todoLoaded(response.todos))
+}
+
+export const todoAdded = (todo) => ({
+  type: 'todos/todoAdded',
+  payload: todo,
+})
 
 export function saveNewTodo(text) {
   return async function saveNewTodoThunk(dispatch, getState) {
     const initialTodo = { text }
     const response = await client.post('/fakeApi/todos', { todo: initialTodo })
-    dispatch({ type: 'todos/todoAdded', payload: response.todo })
+    dispatch(todoAdded(response.todo))
   }
 }
