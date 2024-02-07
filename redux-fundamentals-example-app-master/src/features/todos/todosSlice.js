@@ -1,3 +1,5 @@
+import { client } from '../../api/client'
+
 const initialState = []
 
 function nextTodoId(todos) {
@@ -10,15 +12,7 @@ export default function todosReducer(state = initialState, action) {
     // 액션 타입에 따라 뭔가를 한다
     // {type: 'todos/todoAdded', payload: todoText}
     case 'todos/todoAdded': {
-      return [
-        ...state,
-        // 스프레드 문법으로 이전 todo를 복사하고, 아래 새로운 todo를 추가한다.
-        {
-          id: nextTodoId(state),
-          text: action.payload,
-          completed: false,
-        },
-      ]
+      return [...state, action.payload]
     }
     // {type: 'todos/todoToggled', payload: todoId}
     case 'todos/todoToggled': {
@@ -62,7 +56,30 @@ export default function todosReducer(state = initialState, action) {
       // return state.filter((todo) => todo.completed === false)
       return state.filter((todo) => !todo.completed)
     }
+    case 'todos/todosLoaded': {
+      return action.payload
+    }
+
     default:
       return state
+  }
+}
+
+// Thunk function
+
+export async function fetchTodos(dispatch, getState) {
+  const response = await client.get('/fakeApi/todos')
+
+  dispatch({
+    type: 'todos/todosLoaded',
+    payload: response.todos,
+  })
+}
+
+export function saveNewTodo(text) {
+  return async function saveNewTodoThunk(dispatch, getState) {
+    const initialTodo = { text }
+    const response = await client.post('/fakeApi/todos', { todo: initialTodo })
+    dispatch({ type: 'todos/todoAdded', payload: response.todo })
   }
 }
