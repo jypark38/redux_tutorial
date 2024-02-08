@@ -4,28 +4,39 @@ import { saveNewTodo } from '../todos/todosSlice'
 
 const Header = () => {
   const [text, setText] = useState('')
+  const [status, setStatus] = useState('idle')
   const dispatch = useDispatch()
 
   const handleChange = (event) => setText(event.target.value)
 
-  const handleKeyDown = (event) => {
-    const trimmedText = event.target.value.trim()
+  const handleKeyDown = async (event) => {
+    const trimmedText = text.trim()
 
     if (event.key === 'Enter' && trimmedText) {
-      dispatch(saveNewTodo(trimmedText))
+      setStatus('loading')
+      await dispatch(saveNewTodo(trimmedText))
       setText('')
+      setStatus('idle')
     }
   }
 
+  let isLoading = status === 'loading'
+  let placeholder = isLoading ? '' : 'What needs to be done?'
+  let loader = isLoading ? <div className="loader" /> : null
+
   return (
-    <input
-      type="text"
-      placeholder="What needs to be done?"
-      autoFocus={true}
-      value={text}
-      onChange={handleChange}
-      onKeyDown={handleKeyDown}
-    />
+    <header className="header">
+      <input
+        type="text"
+        placeholder={placeholder}
+        autoFocus={true}
+        value={text}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        disabled={isLoading}
+      />
+      {loader}
+    </header>
   )
 }
 
