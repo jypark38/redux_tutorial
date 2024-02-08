@@ -81,12 +81,10 @@ export const fetchTodos = () => async (dispatch) => {
   dispatch(todosLoaded(response.todos))
 }
 
-export function saveNewTodo(text) {
-  return async function saveNewTodoThunk(dispatch, getState) {
-    const initialTodo = { text }
-    const response = await client.post('/fakeApi/todos', { todo: initialTodo })
-    dispatch(todoAdded(response.todo))
-  }
+export const saveNewTodo = (text) => async (dispatch) => {
+  const initialTodo = { text }
+  const response = await client.post('/fakeApi/todos', { todo: initialTodo })
+  dispatch(todoAdded(response.todo))
 }
 
 // selectors
