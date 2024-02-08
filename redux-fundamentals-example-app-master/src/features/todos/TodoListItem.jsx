@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { availableColors, capitalize } from '../filters/colors'
 import { ReactComponent as TimesSolid } from './times-solid.svg'
 import {
-  colorSelected,
+  todoColorSelected,
   selectTodoById,
   todoDeleted,
   todoToggled,
@@ -21,7 +21,7 @@ const TodoListItem = ({ id }) => {
 
   const handleColorChanged = (event) => {
     const color = event.target.value
-    dispatch(colorSelected(todo.id, color))
+    dispatch(todoColorSelected(todo.id, color))
   }
 
   const onDelete = () => {
