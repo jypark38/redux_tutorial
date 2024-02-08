@@ -2,61 +2,89 @@ import { client } from '../../api/client'
 import { createSelector } from 'reselect'
 import { StatusFilters } from '../filters/filtersSlice'
 
-const initialState = []
+const initialState = {
+  status: 'idle',
+  entities: [],
+}
 
 export default function todosReducer(state = initialState, action) {
   switch (action.type) {
     // 액션 타입에 따라 뭔가를 한다
     // {type: 'todos/todoAdded', payload: todoText}
     case 'todos/todoAdded': {
-      return [...state, action.payload]
+      return {
+        ...state,
+        entities: [...state.entities, action.payload],
+      }
     }
     // {type: 'todos/todoToggled', payload: todoId}
     case 'todos/todoToggled': {
-      return state.map((todo) => {
-        // 만약 관심있는 항목이 아니면, 그대로 보낸다
-        if (todo.id !== action.payload) {
-          return todo
-        }
-        // 바꿔야하는 항목이면 복사본을 반환한다.
-        return {
-          ...todo,
-          completed: !todo.completed,
-        }
-      })
+      return {
+        ...state,
+        entities: state.entities.map((todo) => {
+          if (todo.id !== action.payload) {
+            return todo
+          }
+          return {
+            ...todo,
+            completed: !todo.completed,
+          }
+        }),
+      }
     }
     // {type: 'todos/colorSelected', payload: {todoId, color}}
     case 'todos/colorSelected': {
       const { color, todoId } = action.payload
-      return state.map((todo) => {
-        if (todo.id !== todoId) {
-          return todo
-        }
-        return {
-          ...todo,
-          color,
-        }
-      })
+      return {
+        ...state,
+        entities: state.entities.map((todo) => {
+          if (todo.id !== todoId) {
+            return todo
+          }
+          return {
+            ...todo,
+            color,
+          }
+        }),
+      }
     }
     // {type: 'todos/todoDeleted', payload: todoId}
     case 'todos/todoDeleted': {
-      return state.filter((todo) => todo.id !== action.payload)
+      return {
+        ...state,
+        entities: state.entities.filter((todo) => todo.id !== action.payload),
+      }
     }
     // {type: 'todos/allCompleted'}
     case 'todos/allCompleted': {
-      return state.map((todo) => {
-        return { ...todo, completed: true }
-      })
+      return {
+        ...state,
+        entities: state.entities.map((todo) => {
+          return { ...todo, completed: true }
+        }),
+      }
     }
     // {type: 'todos/completedCleared'}
     case 'todos/completedCleared': {
       // return state.filter((todo) => todo.completed === false)
-      return state.filter((todo) => !todo.completed)
+      return {
+        ...state,
+        entities: state.entities.filter((todo) => !todo.completed),
+      }
+    }
+    case 'todos/todosLoading': {
+      return {
+        ...state,
+        status: 'loading',
+      }
     }
     case 'todos/todosLoaded': {
-      return action.payload
+      return {
+        ...state,
+        status: 'idle',
+        entities: action.payload,
+      }
     }
-
     default:
       return state
   }
@@ -64,7 +92,9 @@ export default function todosReducer(state = initialState, action) {
 
 // Thunk function
 
-export const todoLoaded = (todos) => {
+export const todosLoading = () => ({ type: 'todos/todosLoading' })
+
+export const todosLoaded = (todos) => {
   return {
     type: 'todos/todosLoaded',
     payload: todos,
@@ -72,8 +102,9 @@ export const todoLoaded = (todos) => {
 }
 
 export const fetchTodos = () => async (dispatch) => {
+  dispatch(todosLoading())
   const response = await client.get('/fakeApi/todos')
-  dispatch(todoLoaded(response.todos))
+  dispatch(todosLoaded(response.todos))
 }
 
 export const todoAdded = (todo) => ({
@@ -91,7 +122,7 @@ export function saveNewTodo(text) {
 
 // selectors
 
-export const selectTodos = (state) => state.todos
+export const selectTodos = (state) => state.todos.entities
 
 export const selectTodoById = (state, todoId) => {
   return selectTodos(state).find((todo) => todo.id === todoId)
