@@ -9,12 +9,12 @@ const Header = () => {
 
   const handleChange = (event) => setText(event.target.value)
 
-  const handleKeyDown = async (event) => {
+  const handleKeyDown = (event) => {
     const trimmedText = text.trim()
 
     if (event.key === 'Enter' && trimmedText) {
       setStatus('loading')
-      await dispatch(saveNewTodo(trimmedText))
+      dispatch(saveNewTodo(trimmedText))
       setText('')
       setStatus('idle')
     }

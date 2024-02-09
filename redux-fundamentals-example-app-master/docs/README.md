@@ -47,7 +47,7 @@
 {type: 'todos/todoToggled', payload: todoId}
 {type: 'todos/colorSelected', payload: {todoId, color}}
 {type: 'todos/todoDeleted', payload: todoId}
-{type: 'todos/allCompleted'}
+{type: 'todos/allTodosCompleted'}
 {type: 'todos/completedCleared'}
 {type: 'filters/statusFilterChanged', payload: filterValue}
 {type: 'filters/colorFilterChanged', payload: {color, changeType}}

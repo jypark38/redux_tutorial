@@ -8,7 +8,7 @@ import {
   StatusFilters,
 } from '../filters/filtersSlice'
 import {
-  allCompleted,
+  allTodosCompleted,
   completedCleared,
   selectTodos,
 } from '../todos/todosSlice'
@@ -93,7 +93,7 @@ const Footer = () => {
 
   const { status, colors } = useSelector((state) => state.filters)
 
-  const onMarkCompletedClicked = () => dispatch(allCompleted())
+  const onMarkCompletedClicked = () => dispatch(allTodosCompleted())
   const onClearCompletedClicked = () => dispatch(completedCleared())
 
   const onColorChange = (color, changeType) =>
