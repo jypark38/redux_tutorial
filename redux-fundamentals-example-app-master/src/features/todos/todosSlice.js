@@ -14,7 +14,6 @@ const initialState = todosAdapter.getInitialState({
 })
 
 // Thunk
-
 export const fetchTodos = createAsyncThunk('todos/fetchTodos', async () => {
   const response = await client.get('/fakeApi/todos')
   return response.todos
@@ -86,7 +85,6 @@ export const {
 export default todosSlice.reducer
 
 // selectors
-
 export const { selectAll: selectTodos, selectById: selectTodoById } =
   todosAdapter.getSelectors((state) => state.todos)
 
@@ -111,8 +109,7 @@ export const selectFilteredTodos = createSelector(
     }
     const completedStatus = status === StatusFilters.Completed
     return todos.filter((todo) => {
-      const statusMatches =
-        showAllCompletions || todo.completed === completedStatus
+      const statusMatches = todo.completed === completedStatus
       const colorMatches = colors.length === 0 || colors.includes(todo.color)
       return statusMatches && colorMatches
     })

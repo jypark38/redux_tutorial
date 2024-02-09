@@ -8,17 +8,18 @@ import ColorFilters from './components/ColorFilters'
 
 const Footer = () => {
   const dispatch = useDispatch()
-  const onMarkCompletedClicked = () => dispatch(allTodosCompleted())
-  const onClearCompletedClicked = () => dispatch(completedCleared())
 
   return (
     <footer className="footer">
       <div className="actions">
         <h5>Actions</h5>
-        <button className="button" onClick={onMarkCompletedClicked}>
+        <button
+          className="button"
+          onClick={() => dispatch(allTodosCompleted())}
+        >
           Mark All Completed
         </button>
-        <button className="button" onClick={onClearCompletedClicked}>
+        <button className="button" onClick={() => dispatch(completedCleared())}>
           Clear Completed
         </button>
       </div>
