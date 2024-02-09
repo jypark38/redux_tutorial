@@ -17,7 +17,6 @@ const initialState = todosAdapter.getInitialState({
 
 export const fetchTodos = createAsyncThunk('todos/fetchTodos', async () => {
   const response = await client.get('/fakeApi/todos')
-  console.log('!')
   return response.todos
 })
 
