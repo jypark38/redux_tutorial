@@ -9,3 +9,5 @@
   - `/app`
     - Navbar.js: renders the top header and nav content
     - store.js: creates the Redux store instance
+
+**match props**
