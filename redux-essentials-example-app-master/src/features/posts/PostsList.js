@@ -3,8 +3,10 @@ import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import PostAuthor from './PostAuthor'
 import TimeAgo from './TimeAgo'
+import ReactionButtons from './ReactionButtons'
 
 const PostsList = () => {
+  // 리렌더링 최적화하려면 셀렉터를 따로 만들어야 할듯?
   const posts = useSelector((state) => state.posts)
   const orderedPosts = posts
     .slice()
@@ -21,6 +23,7 @@ const PostsList = () => {
       <Link to={`/posts/${post.id}`} className="button muted-button">
         View Post
       </Link>
+      <ReactionButtons post={post} />
     </article>
   ))
 
