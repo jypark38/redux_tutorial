@@ -9,7 +9,7 @@ import { Spinner } from '../../components/Spinner'
 
 const PostExcerpt = ({ post }) => {
   return (
-    <article className="post-excerpt" key={post.id}>
+    <article className="post-excerpt">
       <h3>{post.title}</h3>
       <div>
         <PostAuthor userId={post.user} />
@@ -47,7 +47,9 @@ const PostsList = () => {
       .slice()
       .sort((a, b) => b.date.localeCompare(a.date))
 
-    content = orderedPosts.map((post) => <PostExcerpt post={post} />)
+    content = orderedPosts.map((post) => (
+      <PostExcerpt post={post} key={post.id} />
+    ))
   } else if (postStatus === 'failed') {
     content = <div>{error}</div>
   }

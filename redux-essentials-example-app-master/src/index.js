@@ -20,11 +20,11 @@ async function start() {
   const root = createRoot(document.getElementById('root'))
 
   root.render(
-    <React.StrictMode>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </React.StrictMode>,
+    // <React.StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>,
+    // </React.StrictMode>,
   )
 }
 
