@@ -4,10 +4,12 @@ import { Link } from 'react-router-dom'
 import PostAuthor from './PostAuthor'
 import TimeAgo from './TimeAgo'
 import ReactionButtons from './ReactionButtons'
-import { fetchPosts, selectAllPosts } from './postsSlice'
+import { fetchPosts, selectPostById, selectPostIds } from './postsSlice'
 import { Spinner } from '../../components/Spinner'
 
-const PostExcerpt = ({ post }) => {
+const PostExcerpt = ({ postId }) => {
+  const post = useSelector((state) => selectPostById(state, postId))
+
   return (
     <article className="post-excerpt">
       <h3>{post.title}</h3>
@@ -28,7 +30,7 @@ const PostsList = () => {
   const dispatch = useDispatch()
 
   // 리렌더링 최적화하려면 메모이징 셀렉터를 따로 만들어야 할듯?
-  const posts = useSelector(selectAllPosts)
+  const orderdPostIds = useSelector(selectPostIds)
   const postStatus = useSelector((state) => state.posts.status)
   const error = useSelector((state) => state.posts.error)
 
@@ -43,12 +45,8 @@ const PostsList = () => {
   if (postStatus === 'loading') {
     content = <Spinner text="loading..." />
   } else if (postStatus === 'succeeded') {
-    const orderedPosts = posts
-      .slice()
-      .sort((a, b) => b.date.localeCompare(a.date))
-
-    content = orderedPosts.map((post) => (
-      <PostExcerpt post={post} key={post.id} />
+    content = orderdPostIds.map((postId) => (
+      <PostExcerpt postId={postId} key={postId} />
     ))
   } else if (postStatus === 'failed') {
     content = <div>{error}</div>
